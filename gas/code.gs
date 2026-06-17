@@ -11,6 +11,8 @@ function doPost(e) {
       deleteTransaction:      () => deleteTransaction(payload),
       upsertMonthlyNote:      () => upsertMonthlyNote(payload),
       getMonthlyNote:         () => getMonthlyNote(payload),
+      getSettings:            () => getSettings(),
+      saveSetting:            () => saveSetting(payload),
     };
 
     if (!handlers[action]) {
@@ -143,6 +145,42 @@ function getMonthlyNote(payload) {
   const rows = sheet.getDataRange().getValues();
   const found = rows.slice(1).find(function(row) { return row[0] === yearMonth; });
   return { comment: found ? found[1] : '' };
+}
+
+// ─── settings ──────────────────────────────────────────────
+
+function getSettings() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('settings');
+  if (!sheet) return {};
+  var rows = sheet.getDataRange().getValues();
+  var result = {};
+  rows.slice(1).forEach(function(row) {
+    if (row[0] && row[1]) {
+      try { result[String(row[0])] = JSON.parse(String(row[1])); } catch(e) {}
+    }
+  });
+  return result;
+}
+
+function saveSetting(payload) {
+  var key = payload.key;
+  var value = payload.value;
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('settings');
+  if (!sheet) {
+    sheet = ss.insertSheet('settings');
+    sheet.appendRow(['key', 'value']);
+  }
+  var rows = sheet.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === key) {
+      sheet.getRange(i + 1, 2).setValue(JSON.stringify(value));
+      return { saved: true };
+    }
+  }
+  sheet.appendRow([key, JSON.stringify(value)]);
+  return { saved: true };
 }
 
 // ─── utilities ─────────────────────────────────────────────

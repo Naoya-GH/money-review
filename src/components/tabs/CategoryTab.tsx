@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAppContext } from '../../contexts/AppContext';
 import { useCategories } from '../../hooks/useCategories';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
+import { api } from '../../api/client';
 
 function CategoryForm({
   initial,
@@ -46,7 +47,9 @@ function PlaceSection() {
   const [deletingName, setDeletingName] = useState<string | null>(null);
 
   const remove = (name: string) => {
-    dispatch({ type: 'SET_PLACES', payload: places.filter(p => p !== name) });
+    const updated = places.filter(p => p !== name);
+    dispatch({ type: 'SET_PLACES', payload: updated });
+    api.saveSetting('places', updated).catch(() => {});
   };
 
   return (
@@ -94,11 +97,15 @@ function PersonSection() {
 
   const add = (name: string) => {
     if (persons.includes(name)) return;
-    dispatch({ type: 'SET_PERSONS', payload: [...persons, name] });
+    const updated = [...persons, name];
+    dispatch({ type: 'SET_PERSONS', payload: updated });
+    api.saveSetting('persons', updated).catch(() => {});
   };
 
   const remove = (name: string) => {
-    dispatch({ type: 'SET_PERSONS', payload: persons.filter(p => p !== name) });
+    const updated = persons.filter(p => p !== name);
+    dispatch({ type: 'SET_PERSONS', payload: updated });
+    api.saveSetting('persons', updated).catch(() => {});
   };
 
   const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useAppContext } from '../../contexts/AppContext';
 import { useAppendTransactions } from '../../hooks/useTransactions';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
+import { api } from '../../api/client';
 import type { Transaction } from '../../types';
 
 type PendingItem = Omit<Transaction, 'id'>;
@@ -70,7 +71,9 @@ export function RegisterTab() {
         .map(i => i.description)
         .filter(d => d && !state.places.includes(d));
       if (newPlaces.length > 0) {
-        dispatch({ type: 'SET_PLACES', payload: [...state.places, ...newPlaces] });
+        const updated = [...state.places, ...newPlaces];
+        dispatch({ type: 'SET_PLACES', payload: updated });
+        api.saveSetting('places', updated).catch(() => {});
       }
       setPendingItems([]);
     }

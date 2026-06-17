@@ -7,6 +7,7 @@ import { DashboardTab } from './components/tabs/DashboardTab';
 import { RegisterTab } from './components/tabs/RegisterTab';
 import { ListTab } from './components/tabs/ListTab';
 import { CategoryTab } from './components/tabs/CategoryTab';
+import { useSettings } from './hooks/useSettings';
 
 function TabContent() {
   const { state } = useAppContext();
@@ -21,6 +22,7 @@ function TabContent() {
 }
 
 function AppShell() {
+  useSettings();
   return (
     <div className="min-h-svh flex flex-col bg-gray-50">
       <Header />

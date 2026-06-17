@@ -67,6 +67,7 @@ type AppAction =
   | { type: 'SET_CATEGORIES'; payload: Category[] }
   | { type: 'SET_PERSONS'; payload: string[] }
   | { type: 'SET_PLACES'; payload: string[] }
+  | { type: 'LOAD_SETTINGS'; payload: { categories?: Category[]; persons?: string[]; places?: string[] } }
   | { type: 'ADD_TOAST'; payload: Toast }
   | { type: 'REMOVE_TOAST'; payload: string }
   | { type: 'SET_TAB'; payload: ActiveTab };
@@ -108,6 +109,15 @@ function reducer(state: AppState, action: AppAction): AppState {
     case 'SET_PLACES': {
       localStorage.setItem('mr_places', JSON.stringify(action.payload));
       return { ...state, places: action.payload };
+    }
+    case 'LOAD_SETTINGS': {
+      const categories = action.payload.categories ?? state.categories;
+      const persons = action.payload.persons ?? state.persons;
+      const places = action.payload.places ?? state.places;
+      localStorage.setItem('mr_categories', JSON.stringify(categories));
+      localStorage.setItem('mr_persons', JSON.stringify(persons));
+      localStorage.setItem('mr_places', JSON.stringify(places));
+      return { ...state, categories, persons, places };
     }
     case 'ADD_TOAST':
       return { ...state, toasts: [...state.toasts, action.payload] };

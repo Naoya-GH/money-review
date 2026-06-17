@@ -4,6 +4,7 @@ import type {
   AppendTransactionsResponse,
   UpsertMonthlyNoteResponse,
   Transaction,
+  Category,
 } from '../types';
 
 const GAS_URL = import.meta.env.VITE_GAS_URL as string;
@@ -53,4 +54,10 @@ export const api = {
 
   getMonthlyNote: (yearMonth: string) =>
     callGas<{ comment: string }>('getMonthlyNote', { yearMonth }),
+
+  getSettings: () =>
+    callGas<{ categories?: Category[]; persons?: string[]; places?: string[] }>('getSettings', {}),
+
+  saveSetting: (key: string, value: unknown) =>
+    callGas<{ saved: boolean }>('saveSetting', { key, value }),
 };
