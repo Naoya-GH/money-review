@@ -12,10 +12,36 @@ function fmt(n: number) {
   return `¥${n.toLocaleString()}`;
 }
 
-function TotalCard({ total }: { total: number }) {
+function PersonFilter({
+  persons,
+  selected,
+  onChange,
+}: {
+  persons: string[];
+  selected: string | null;
+  onChange: (p: string | null) => void;
+}) {
+  if (persons.length === 0) return null;
+  const btnCls = (active: boolean) =>
+    `px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+      active
+        ? 'bg-indigo-600 text-white border-indigo-600'
+        : 'bg-white text-gray-600 border-gray-200'
+    }`;
+  return (
+    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+      <button className={btnCls(selected === null)} onClick={() => onChange(null)}>全員</button>
+      {persons.map(p => (
+        <button key={p} className={btnCls(selected === p)} onClick={() => onChange(p)}>{p}</button>
+      ))}
+    </div>
+  );
+}
+
+function TotalCard({ total, label }: { total: number; label?: string }) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm">
-      <p className="text-xs text-gray-500 mb-1">今月の支出</p>
+      <p className="text-xs text-gray-500 mb-1">{label ?? '今月の支出'}</p>
       <p className="text-3xl font-bold text-gray-900">{fmt(total)}</p>
     </div>
   );
@@ -161,7 +187,12 @@ function NoteCard({ yearMonth }: { yearMonth: string }) {
 export function DashboardTab() {
   const { state } = useAppContext();
   const { loading } = useTransactions(state.selectedMonth);
-  const data = useDashboard(state.selectedMonth);
+  const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
+  const data = useDashboard(state.selectedMonth, selectedPerson);
+
+  const totalLabel = selectedPerson
+    ? `${selectedPerson}の今月の支出`
+    : '今月の支出';
 
   if (loading === 'loading') {
     return (
@@ -171,27 +202,35 @@ export function DashboardTab() {
     );
   }
 
-  if (!data || data.thisMonth.total === 0) {
-    return (
-      <div className="space-y-3">
-        <TotalCard total={0} />
-        <p className="text-center text-sm text-gray-400 py-8">
-          今月の支出はまだありません。登録タブから入力してください
-        </p>
-        <NoteCard yearMonth={state.selectedMonth} />
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-3">
-      <TotalCard total={data.thisMonth.total} />
-      <ComparisonCard diff={data.diff} diffRate={data.diffRate} lastTotal={data.lastMonth.total} />
-      {data.thisMonth.byCategory.length > 0 && (
-        <CategoryChart data={data.thisMonth.byCategory} />
+      <PersonFilter
+        persons={state.persons}
+        selected={selectedPerson}
+        onChange={setSelectedPerson}
+      />
+
+      {(!data || data.thisMonth.total === 0) ? (
+        <>
+          <TotalCard total={0} label={totalLabel} />
+          <p className="text-center text-sm text-gray-400 py-8">
+            {selectedPerson
+              ? `${selectedPerson}の今月の支出はまだありません`
+              : '今月の支出はまだありません。登録タブから入力してください'}
+          </p>
+          <NoteCard yearMonth={state.selectedMonth} />
+        </>
+      ) : (
+        <>
+          <TotalCard total={data.thisMonth.total} label={totalLabel} />
+          <ComparisonCard diff={data.diff} diffRate={data.diffRate} lastTotal={data.lastMonth.total} />
+          {data.thisMonth.byCategory.length > 0 && (
+            <CategoryChart data={data.thisMonth.byCategory} />
+          )}
+          <RankingCard data={data.thisMonth.byCategory} />
+          <NoteCard yearMonth={state.selectedMonth} />
+        </>
       )}
-      <RankingCard data={data.thisMonth.byCategory} />
-      <NoteCard yearMonth={state.selectedMonth} />
     </div>
   );
 }

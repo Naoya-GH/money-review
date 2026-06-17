@@ -19,6 +19,24 @@ function loadCategories(): Category[] {
   }
 }
 
+function loadPersons(): string[] {
+  try {
+    const stored = localStorage.getItem('mr_persons');
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function loadPlaces(): string[] {
+  try {
+    const stored = localStorage.getItem('mr_places');
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
 function getCurrentYearMonth(): string {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -31,6 +49,8 @@ type AppState = {
   monthlyNote: string;
   noteLoading: LoadingState;
   categories: Category[];
+  persons: string[];
+  places: string[];
   toasts: Toast[];
   activeTab: ActiveTab;
 };
@@ -45,6 +65,8 @@ type AppAction =
   | { type: 'SET_MONTHLY_NOTE'; payload: string }
   | { type: 'SET_NOTE_LOADING'; payload: LoadingState }
   | { type: 'SET_CATEGORIES'; payload: Category[] }
+  | { type: 'SET_PERSONS'; payload: string[] }
+  | { type: 'SET_PLACES'; payload: string[] }
   | { type: 'ADD_TOAST'; payload: Toast }
   | { type: 'REMOVE_TOAST'; payload: string }
   | { type: 'SET_TAB'; payload: ActiveTab };
@@ -79,6 +101,14 @@ function reducer(state: AppState, action: AppAction): AppState {
       localStorage.setItem('mr_categories', JSON.stringify(action.payload));
       return { ...state, categories: action.payload };
     }
+    case 'SET_PERSONS': {
+      localStorage.setItem('mr_persons', JSON.stringify(action.payload));
+      return { ...state, persons: action.payload };
+    }
+    case 'SET_PLACES': {
+      localStorage.setItem('mr_places', JSON.stringify(action.payload));
+      return { ...state, places: action.payload };
+    }
     case 'ADD_TOAST':
       return { ...state, toasts: [...state.toasts, action.payload] };
     case 'REMOVE_TOAST':
@@ -97,6 +127,8 @@ const initialState: AppState = {
   monthlyNote: '',
   noteLoading: 'idle',
   categories: loadCategories(),
+  persons: loadPersons(),
+  places: loadPlaces(),
   toasts: [],
   activeTab: 'dashboard',
 };

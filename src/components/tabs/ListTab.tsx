@@ -56,6 +56,12 @@ function EditForm({
           {state.categories.map(c => <option key={c.name}>{c.name}</option>)}
         </select>
       )}
+      {state.persons.length > 0 && field('メンバー',
+        <select value={form.person ?? ''} onChange={e => setForm(f => ({ ...f, person: e.target.value }))} className={inputCls}>
+          <option value="">（未設定）</option>
+          {state.persons.map(p => <option key={p}>{p}</option>)}
+        </select>
+      )}
       {field('金額',
         <input type="number" value={form.amount} onChange={e => setForm(f => ({ ...f, amount: Number(e.target.value) }))} className={inputCls} />
       )}
@@ -93,10 +99,15 @@ function TransactionRow({ tx }: { tx: Transaction }) {
     <>
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <div
-          className="flex items-center px-4 py-3 gap-3 cursor-pointer"
+          className="flex items-center px-4 py-3 gap-2 cursor-pointer"
           onClick={() => setExpanded(e => !e)}
         >
           <span className="text-xs text-gray-400 w-10 shrink-0">{mmdd}</span>
+          {tx.person && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
+              {tx.person}
+            </span>
+          )}
           <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${categoryColor(state.categories, tx.category)}`}>
             {tx.category}
           </span>

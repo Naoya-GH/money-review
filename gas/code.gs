@@ -77,10 +77,10 @@ function appendTransactions(payload) {
     const id = now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate())
       + '_' + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds())
       + '_' + i;
-    return [id, t.date, t.category, t.amount, t.description, t.memo || ''];
+    return [id, t.date, t.category, t.amount, t.description, t.memo || '', t.person || ''];
   });
 
-  sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, 6).setValues(rows);
+  sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, 7).setValues(rows);
   return { count: rows.length };
 }
 
@@ -91,13 +91,14 @@ function updateTransaction(payload) {
 
   for (var i = 1; i < rows.length; i++) {
     if (String(rows[i][0]) === transaction.id) {
-      sheet.getRange(i + 1, 1, 1, 6).setValues([[
+      sheet.getRange(i + 1, 1, 1, 7).setValues([[
         transaction.id,
         transaction.date,
         transaction.category,
         transaction.amount,
         transaction.description,
-        transaction.memo || ''
+        transaction.memo || '',
+        transaction.person || ''
       ]]);
       return { updated: true };
     }
@@ -160,7 +161,8 @@ function rowToTransaction(row) {
     category: String(row[2]),
     amount: Number(row[3]),
     description: String(row[4]),
-    memo: row[5] ? String(row[5]) : ''
+    memo: row[5] ? String(row[5]) : '',
+    person: row[6] ? String(row[6]) : undefined
   };
 }
 

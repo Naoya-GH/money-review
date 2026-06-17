@@ -14,7 +14,7 @@ function buildCategorySummary(txs: Transaction[], total: number): CategorySummar
     .sort((a, b) => b.total - a.total);
 }
 
-export function useDashboard(yearMonth: string): DashboardData | null {
+export function useDashboard(yearMonth: string, person: string | null = null): DashboardData | null {
   const { state } = useAppContext();
   const { transactions } = state;
 
@@ -24,8 +24,11 @@ export function useDashboard(yearMonth: string): DashboardData | null {
       ? `${y - 1}-12`
       : `${y}-${String(m - 1).padStart(2, '0')}`;
 
-    const thisMonthTx = transactions.filter(t => t.date.startsWith(yearMonth));
-    const lastMonthTx = transactions.filter(t => t.date.startsWith(prevYM));
+    const filter = (txs: Transaction[]) =>
+      person ? txs.filter(t => t.person === person) : txs;
+
+    const thisMonthTx = filter(transactions.filter(t => t.date.startsWith(yearMonth)));
+    const lastMonthTx = filter(transactions.filter(t => t.date.startsWith(prevYM)));
 
     const thisTotal = thisMonthTx.reduce((s, t) => s + t.amount, 0);
     const lastTotal = lastMonthTx.reduce((s, t) => s + t.amount, 0);
@@ -39,5 +42,5 @@ export function useDashboard(yearMonth: string): DashboardData | null {
       diff,
       diffRate,
     };
-  }, [transactions, yearMonth]);
+  }, [transactions, yearMonth, person]);
 }
