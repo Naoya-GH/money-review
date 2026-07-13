@@ -3,6 +3,7 @@ import { useAppContext } from '../../contexts/AppContext';
 import { useAppendTransactions } from '../../hooks/useTransactions';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
 import { api } from '../../api/client';
+import { extractFromReceipt, fileToBase64 } from '../../api/gemini';
 import type { Transaction } from '../../types';
 
 type PendingItem = Omit<Transaction, 'id'>;
@@ -28,7 +29,10 @@ export function RegisterTab() {
   const [showForm, setShowForm] = useState(false);
 
   const amountRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   const hasPersons = state.persons.length > 0;
+  const [ocrLoading, setOcrLoading] = useState(false);
+  const [ocrError, setOcrError] = useState('');
 
   useEffect(() => {
     if (showForm) amountRef.current?.focus();
@@ -84,6 +88,34 @@ export function RegisterTab() {
     if (e.key === 'Enter') addItem();
   };
 
+  const handleOcr = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+    setOcrLoading(true);
+    setOcrError('');
+    try {
+      const { base64, mimeType } = await fileToBase64(file);
+      const categoryNames = state.categories.map(c => c.name);
+      const items = await extractFromReceipt(base64, mimeType, categoryNames);
+      const newItems: PendingItem[] = items.map(i => ({
+        date,
+        category: state.categories.find(c => c.name === i.category)
+          ? i.category
+          : state.categories[0]?.name ?? '',
+        amount: i.amount,
+        description: i.description,
+        memo: i.memo ?? '',
+        ...(hasPersons && formPerson ? { person: formPerson } : {}),
+      }));
+      setPendingItems(prev => [...prev, ...newItems]);
+    } catch (err) {
+      setOcrError(err instanceof Error ? err.message : 'OCRに失敗しました');
+    } finally {
+      setOcrLoading(false);
+    }
+  };
+
   const canAdd =
     formCategory &&
     parseInt(formAmount, 10) > 0 &&
@@ -104,7 +136,28 @@ export function RegisterTab() {
       </div>
 
       <div className="bg-white rounded-xl p-4 shadow-sm">
-        <p className="text-xs text-gray-500 mb-2">カテゴリを選択</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs text-gray-500">カテゴリを選択</p>
+          <button
+            onClick={() => cameraRef.current?.click()}
+            disabled={ocrLoading}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium disabled:opacity-50"
+          >
+            {ocrLoading ? <LoadingSpinner /> : '📷'}
+            <span>{ocrLoading ? '読み取り中...' : 'レシート読み取り'}</span>
+          </button>
+          <input
+            ref={cameraRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleOcr}
+            className="hidden"
+          />
+        </div>
+        {ocrError && (
+          <p className="text-xs text-red-500 mb-2">⚠ {ocrError}</p>
+        )}
         <div className="flex flex-wrap gap-2">
           {state.categories.map(c => (
             <button
