@@ -47,9 +47,14 @@ function PlaceSection() {
   const [deletingName, setDeletingName] = useState<string | null>(null);
 
   const remove = (name: string) => {
-    const updated = places.filter(p => p !== name);
-    dispatch({ type: 'SET_PLACES', payload: updated });
-    api.saveSetting('places', updated).catch(() => {});
+    const updatedPlaces = places.filter(p => p !== name);
+    dispatch({ type: 'SET_PLACES', payload: updatedPlaces });
+    api.saveSetting('places', updatedPlaces).catch(() => {});
+
+    const updatedUsage = { ...state.placeUsage };
+    delete updatedUsage[name];
+    dispatch({ type: 'SET_PLACE_USAGE', payload: updatedUsage });
+    api.saveSetting('placeUsage', updatedUsage).catch(() => {});
   };
 
   return (

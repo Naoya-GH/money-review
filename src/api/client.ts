@@ -56,7 +56,7 @@ export const api = {
     callGas<{ comment: string }>('getMonthlyNote', { yearMonth }),
 
   getSettings: () =>
-    callGas<{ categories?: Category[]; persons?: string[]; places?: string[] }>('getSettings', {}),
+    callGas<{ categories?: Category[]; persons?: string[]; places?: string[]; placeUsage?: Record<string, number> }>('getSettings', {}),
 
   saveSetting: (key: string, value: unknown) =>
     callGas<{ saved: boolean }>('saveSetting', { key, value }),

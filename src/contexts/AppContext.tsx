@@ -37,6 +37,15 @@ function loadPlaces(): string[] {
   }
 }
 
+function loadPlaceUsage(): Record<string, number> {
+  try {
+    const stored = localStorage.getItem('mr_place_usage');
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
+
 function getCurrentYearMonth(): string {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -51,6 +60,7 @@ type AppState = {
   categories: Category[];
   persons: string[];
   places: string[];
+  placeUsage: Record<string, number>;
   toasts: Toast[];
   activeTab: ActiveTab;
 };
@@ -67,7 +77,8 @@ type AppAction =
   | { type: 'SET_CATEGORIES'; payload: Category[] }
   | { type: 'SET_PERSONS'; payload: string[] }
   | { type: 'SET_PLACES'; payload: string[] }
-  | { type: 'LOAD_SETTINGS'; payload: { categories?: Category[]; persons?: string[]; places?: string[] } }
+  | { type: 'SET_PLACE_USAGE'; payload: Record<string, number> }
+  | { type: 'LOAD_SETTINGS'; payload: { categories?: Category[]; persons?: string[]; places?: string[]; placeUsage?: Record<string, number> } }
   | { type: 'ADD_TOAST'; payload: Toast }
   | { type: 'REMOVE_TOAST'; payload: string }
   | { type: 'SET_TAB'; payload: ActiveTab };
@@ -110,14 +121,20 @@ function reducer(state: AppState, action: AppAction): AppState {
       localStorage.setItem('mr_places', JSON.stringify(action.payload));
       return { ...state, places: action.payload };
     }
+    case 'SET_PLACE_USAGE': {
+      localStorage.setItem('mr_place_usage', JSON.stringify(action.payload));
+      return { ...state, placeUsage: action.payload };
+    }
     case 'LOAD_SETTINGS': {
       const categories = action.payload.categories ?? state.categories;
       const persons = action.payload.persons ?? state.persons;
       const places = action.payload.places ?? state.places;
+      const placeUsage = action.payload.placeUsage ?? state.placeUsage;
       localStorage.setItem('mr_categories', JSON.stringify(categories));
       localStorage.setItem('mr_persons', JSON.stringify(persons));
       localStorage.setItem('mr_places', JSON.stringify(places));
-      return { ...state, categories, persons, places };
+      localStorage.setItem('mr_place_usage', JSON.stringify(placeUsage));
+      return { ...state, categories, persons, places, placeUsage };
     }
     case 'ADD_TOAST':
       return { ...state, toasts: [...state.toasts, action.payload] };
@@ -139,6 +156,7 @@ const initialState: AppState = {
   categories: loadCategories(),
   persons: loadPersons(),
   places: loadPlaces(),
+  placeUsage: loadPlaceUsage(),
   toasts: [],
   activeTab: 'dashboard',
 };

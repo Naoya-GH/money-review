@@ -71,13 +71,20 @@ export function RegisterTab() {
     setSubmitting(true);
     const ok = await append(pendingItems);
     if (ok) {
-      const newPlaces = pendingItems
-        .map(i => i.description)
-        .filter(d => d && !state.places.includes(d));
-      if (newPlaces.length > 0) {
-        const updated = [...state.places, ...newPlaces];
-        dispatch({ type: 'SET_PLACES', payload: updated });
-        api.saveSetting('places', updated).catch(() => {});
+      const updatedUsage = { ...state.placeUsage };
+      pendingItems.forEach(i => {
+        if (i.description) updatedUsage[i.description] = (updatedUsage[i.description] ?? 0) + 1;
+      });
+      dispatch({ type: 'SET_PLACE_USAGE', payload: updatedUsage });
+      api.saveSetting('placeUsage', updatedUsage).catch(() => {});
+
+      const promoted = Object.entries(updatedUsage)
+        .filter(([name, count]) => count >= 3 && !state.places.includes(name))
+        .map(([name]) => name);
+      if (promoted.length > 0) {
+        const updatedPlaces = [...state.places, ...promoted];
+        dispatch({ type: 'SET_PLACES', payload: updatedPlaces });
+        api.saveSetting('places', updatedPlaces).catch(() => {});
       }
       setPendingItems([]);
     }
