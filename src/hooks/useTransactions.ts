@@ -8,20 +8,33 @@ export function useTransactions(yearMonth: string) {
   const { state, dispatch } = useAppContext();
   const { showToast } = useToast();
   const cancelledRef = useRef(false);
+  const fetchedMonthRef = useRef('');
 
   useEffect(() => {
     cancelledRef.current = false;
 
-    const hasData = state.transactions.some(t => t.date.startsWith(yearMonth));
-    if (hasData || state.transactionsLoading === 'loading') return;
+    const cacheKey = `mr_txn_${yearMonth}`;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        dispatch({ type: 'SET_TRANSACTIONS', payload: JSON.parse(cached) as Transaction[] });
+      } catch {}
+    }
 
-    dispatch({ type: 'SET_TRANSACTIONS_LOADING', payload: 'loading' });
+    if (fetchedMonthRef.current === yearMonth) return;
+    fetchedMonthRef.current = yearMonth;
+
+    if (!cached) {
+      dispatch({ type: 'SET_TRANSACTIONS_LOADING', payload: 'loading' });
+    }
+
     api
       .getTransactions2Months(yearMonth)
       .then(res => {
         if (cancelledRef.current) return;
         dispatch({ type: 'SET_TRANSACTIONS', payload: res.transactions });
         dispatch({ type: 'SET_TRANSACTIONS_LOADING', payload: 'success' });
+        localStorage.setItem(cacheKey, JSON.stringify(res.transactions));
       })
       .catch((err: unknown) => {
         if (cancelledRef.current) return;
@@ -46,11 +59,11 @@ export function useAppendTransactions() {
   const append = async (transactions: Omit<Transaction, 'id'>[]) => {
     try {
       const res = await api.appendTransactions(transactions);
-      // Re-fetch so the list reflects GAS-assigned IDs immediately
       dispatch({ type: 'SET_TRANSACTIONS_LOADING', payload: 'loading' });
       const fresh = await api.getTransactions2Months(state.selectedMonth);
       dispatch({ type: 'SET_TRANSACTIONS', payload: fresh.transactions });
       dispatch({ type: 'SET_TRANSACTIONS_LOADING', payload: 'success' });
+      localStorage.setItem(`mr_txn_${state.selectedMonth}`, JSON.stringify(fresh.transactions));
       showToast('success', `${res.count}件登録しました`);
       return true;
     } catch (err) {
