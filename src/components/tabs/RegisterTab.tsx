@@ -138,7 +138,7 @@ export function RegisterTab() {
           type="date"
           value={date}
           onChange={e => setDate(e.target.value)}
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
       </div>
 
@@ -172,8 +172,8 @@ export function RegisterTab() {
               onClick={() => selectCategory(c.name)}
               className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
                 formCategory === c.name && showForm
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-indigo-50 text-indigo-700 border-indigo-100'
+                  ? 'bg-primary-600 text-white border-primary-600'
+                  : 'bg-primary-100 text-primary-700 border-primary-100'
               }`}
             >
               {c.name}
@@ -183,8 +183,8 @@ export function RegisterTab() {
       </div>
 
       {showForm && (
-        <div className="bg-indigo-50 rounded-xl p-4 shadow-sm border border-indigo-100 space-y-3">
-          <p className="text-sm font-semibold text-indigo-800">{formCategory}</p>
+        <div className="bg-primary-50 rounded-xl p-4 shadow-sm border border-primary-100 space-y-3">
+          <p className="text-sm font-semibold text-primary-700">{formCategory}</p>
 
           {hasPersons && (
             <div>
@@ -196,7 +196,7 @@ export function RegisterTab() {
                     onClick={() => setFormPerson(p)}
                     className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
                       formPerson === p
-                        ? 'bg-indigo-600 text-white border-indigo-600'
+                        ? 'bg-primary-600 text-white border-primary-600'
                         : 'bg-white text-gray-600 border-gray-200'
                     }`}
                   >
@@ -219,7 +219,7 @@ export function RegisterTab() {
                 onChange={e => setFormAmount(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                className="w-full border border-gray-200 rounded-lg pl-7 pr-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 rounded-lg pl-7 pr-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
@@ -250,7 +250,7 @@ export function RegisterTab() {
               onChange={e => setFormDescription(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="例：スーパー、ランチ"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
@@ -262,7 +262,7 @@ export function RegisterTab() {
               onChange={e => setFormMemo(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="例：友人と、特売"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
@@ -276,7 +276,7 @@ export function RegisterTab() {
             <button
               onClick={addItem}
               disabled={!canAdd}
-              className="flex-1 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium disabled:opacity-40"
+              className="flex-1 py-2.5 bg-primary-600 text-white rounded-lg text-sm font-medium disabled:opacity-40"
             >
               追加
             </button>
@@ -295,7 +295,7 @@ export function RegisterTab() {
                     {item.person}
                   </span>
                 )}
-                <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs shrink-0">
+                <span className="px-2 py-0.5 rounded-full bg-primary-100 text-primary-700 text-xs shrink-0">
                   {item.category}
                 </span>
                 <span className="text-sm font-medium text-gray-900 shrink-0">
@@ -320,7 +320,7 @@ export function RegisterTab() {
       <button
         onClick={handleSubmit}
         disabled={!canSubmit}
-        className="w-full py-3 rounded-xl bg-indigo-600 text-white font-medium text-sm disabled:opacity-40 flex items-center justify-center gap-2"
+        className="w-full py-3 rounded-xl bg-primary-600 text-white font-medium text-sm disabled:opacity-40 flex items-center justify-center gap-2"
       >
         {submitting ? (
           <>

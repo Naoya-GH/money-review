@@ -23,7 +23,7 @@ function CategoryForm({
         value={value}
         onChange={e => setValue(e.target.value)}
         autoFocus
-        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
       />
       <div className="flex gap-2">
         <button onClick={onCancel} className="flex-1 py-2 border border-gray-300 rounded-lg text-sm text-gray-600">
@@ -32,7 +32,7 @@ function CategoryForm({
         <button
           onClick={() => value.trim() && onSave(value.trim())}
           disabled={!value.trim()}
-          className="flex-1 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium disabled:opacity-40"
+          className="flex-1 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium disabled:opacity-40"
         >
           保存
         </button>
@@ -113,7 +113,7 @@ function PersonSection() {
     api.saveSetting('persons', updated).catch(() => {});
   };
 
-  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
+  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500';
 
   return (
     <div className="space-y-3">
@@ -122,7 +122,7 @@ function PersonSection() {
         {!adding && (
           <button
             onClick={() => { setAdding(true); setValue(''); }}
-            className="text-sm text-indigo-600 font-medium"
+            className="text-sm text-primary-600 font-medium"
           >
             ＋ 追加
           </button>
@@ -150,7 +150,7 @@ function PersonSection() {
             <button
               onClick={() => { add(value.trim()); setAdding(false); setValue(''); }}
               disabled={!value.trim() || persons.includes(value.trim())}
-              className="flex-1 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium disabled:opacity-40"
+              className="flex-1 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium disabled:opacity-40"
             >
               保存
             </button>
@@ -216,7 +216,7 @@ export function CategoryTab() {
           {!adding && categories.length < 20 && (
             <button
               onClick={() => setAdding(true)}
-              className="text-sm text-indigo-600 font-medium"
+              className="text-sm text-primary-600 font-medium"
             >
               ＋ 追加
             </button>
@@ -251,7 +251,7 @@ export function CategoryTab() {
               <span className="flex-1 text-sm text-gray-800">{c.name}</span>
               <button
                 onClick={() => setEditingName(c.name)}
-                className="text-xs text-gray-400 hover:text-indigo-600 px-1"
+                className="text-xs text-gray-400 hover:text-primary-600 px-1"
               >
                 ✎
               </button>

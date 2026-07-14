@@ -6,7 +6,7 @@ import { ConfirmDialog } from '../ui/ConfirmDialog';
 import type { Transaction } from '../../types';
 
 const BADGE_COLORS = [
-  'bg-indigo-100 text-indigo-700',
+  'bg-primary-100 text-primary-700',
   'bg-purple-100 text-purple-700',
   'bg-pink-100 text-pink-700',
   'bg-amber-100 text-amber-700',
@@ -44,10 +44,10 @@ function EditForm({
     </div>
   );
 
-  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
+  const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500';
 
   return (
-    <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 space-y-3">
+    <div className="px-4 py-3 bg-primary-50 border-t border-primary-100 space-y-3">
       {field('日付',
         <input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className={inputCls} />
       )}
@@ -78,7 +78,7 @@ function EditForm({
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex-1 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium disabled:opacity-50"
+          className="flex-1 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium disabled:opacity-50"
         >
           {saving ? '保存中...' : '保存'}
         </button>

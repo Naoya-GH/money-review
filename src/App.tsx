@@ -29,7 +29,7 @@ function TabContent() {
 function AppShell() {
   useSettings();
   return (
-    <div className="min-h-svh flex flex-col bg-gray-50">
+    <div className="min-h-svh flex flex-col bg-primary-50">
       <Header />
       <TabContent />
       <BottomNav />

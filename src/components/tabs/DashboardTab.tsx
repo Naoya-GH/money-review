@@ -6,7 +6,7 @@ import { useDashboard } from '../../hooks/useDashboard';
 import { useMonthlyNote } from '../../hooks/useMonthlyNote';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
 
-const COLORS = ['#4F46E5', '#7C3AED', '#DB2777', '#D97706', '#059669', '#2563EB', '#DC2626'];
+const COLORS = ['#5d2e46', '#b87d6d', '#d4a5a5', '#8b5e55', '#c49090', '#4a2438', '#e8d5c4'];
 
 function fmt(n: number) {
   return `¥${n.toLocaleString()}`;
@@ -25,7 +25,7 @@ function PersonFilter({
   const btnCls = (active: boolean) =>
     `px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
       active
-        ? 'bg-indigo-600 text-white border-indigo-600'
+        ? 'bg-primary-600 text-white border-primary-600'
         : 'bg-white text-gray-600 border-gray-200'
     }`;
   return (
@@ -149,7 +149,7 @@ function NoteCard({ yearMonth }: { yearMonth: string }) {
       <div className="flex items-center justify-between mb-2">
         <p className="text-xs text-gray-500">今月のメモ</p>
         {!editing && (
-          <button onClick={startEdit} className="text-xs text-indigo-600">編集</button>
+          <button onClick={startEdit} className="text-xs text-primary-500">編集</button>
         )}
       </div>
       {editing ? (
@@ -158,7 +158,7 @@ function NoteCard({ yearMonth }: { yearMonth: string }) {
             value={draft}
             onChange={e => setDraft(e.target.value)}
             rows={3}
-            className="w-full border border-gray-200 rounded-lg p-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-gray-200 rounded-lg p-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
           <div className="flex gap-2">
             <button
@@ -169,7 +169,7 @@ function NoteCard({ yearMonth }: { yearMonth: string }) {
             </button>
             <button
               onClick={handleSave}
-              className="flex-1 py-1.5 bg-indigo-600 text-white rounded-lg text-sm font-medium"
+              className="flex-1 py-1.5 bg-primary-600 text-white rounded-lg text-sm font-medium"
             >
               保存
             </button>

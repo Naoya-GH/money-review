@@ -20,7 +20,7 @@ export function BottomNav() {
             key={tab.id}
             onClick={() => dispatch({ type: 'SET_TAB', payload: tab.id })}
             className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 min-h-[56px] text-xs ${
-              active ? 'text-indigo-600' : 'text-gray-400'
+              active ? 'text-primary-600' : 'text-gray-400'
             }`}
           >
             <span className={`text-xl leading-none ${active ? 'font-bold' : ''}`}>{tab.icon}</span>
