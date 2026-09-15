@@ -6,7 +6,7 @@ import { useDashboard } from '../../hooks/useDashboard';
 import { useMonthlyNote } from '../../hooks/useMonthlyNote';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
 
-const COLORS = ['#5d2e46', '#b87d6d', '#d4a5a5', '#8b5e55', '#c49090', '#4a2438', '#e8d5c4'];
+const COLORS = ['#E11D48', '#FB7185', '#FECDD3', '#9F1239', '#FDA4AF', '#BE123C', '#FFE4E6'];
 
 function fmt(n: number) {
   return `¥${n.toLocaleString()}`;
@@ -40,9 +40,9 @@ function PersonFilter({
 
 function TotalCard({ total, label }: { total: number; label?: string }) {
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm">
+    <div className="bg-white rounded-2xl p-5 border border-gray-100">
       <p className="text-xs text-gray-500 mb-1">{label ?? '今月の支出'}</p>
-      <p className="text-3xl font-bold text-gray-900">{fmt(total)}</p>
+      <p className="text-3xl font-bold font-display text-gray-900">{fmt(total)}</p>
     </div>
   );
 }
@@ -50,7 +50,7 @@ function TotalCard({ total, label }: { total: number; label?: string }) {
 function ComparisonCard({ diff, diffRate, lastTotal }: { diff: number; diffRate: number | null; lastTotal: number }) {
   if (lastTotal === 0) {
     return (
-      <div className="bg-white rounded-xl p-4 shadow-sm">
+      <div className="bg-white rounded-2xl p-5 border border-gray-100">
         <p className="text-xs text-gray-500 mb-1">先月比較</p>
         <p className="text-sm text-gray-400">先月データなし</p>
       </div>
@@ -60,9 +60,9 @@ function ComparisonCard({ diff, diffRate, lastTotal }: { diff: number; diffRate:
   const color = up ? 'text-red-500' : 'text-green-600';
   const arrow = up ? '↑' : '↓';
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm">
+    <div className="bg-white rounded-2xl p-5 border border-gray-100">
       <p className="text-xs text-gray-500 mb-1">先月比較</p>
-      <p className={`text-lg font-semibold ${color}`}>
+      <p className={`text-lg font-semibold font-display ${color}`}>
         {up ? '+' : ''}{fmt(diff)}（{up ? '+' : ''}{diffRate?.toFixed(1)}%）{arrow}
       </p>
     </div>
@@ -78,7 +78,7 @@ function CategoryChart({ data }: { data: { category: string; total: number; rati
   ];
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm">
+    <div className="bg-white rounded-2xl p-5 border border-gray-100">
       <p className="text-xs text-gray-500 mb-3">カテゴリ別支出</p>
       <ResponsiveContainer width="100%" height={200}>
         <PieChart>
@@ -112,14 +112,14 @@ function CategoryChart({ data }: { data: { category: string; total: number; rati
 function RankingCard({ data }: { data: { category: string; total: number; ratio: number }[] }) {
   const top5 = data.slice(0, 5);
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm">
+    <div className="bg-white rounded-2xl p-5 border border-gray-100">
       <p className="text-xs text-gray-500 mb-3">支出ランキング</p>
       <div className="space-y-2">
         {top5.map((d, i) => (
           <div key={d.category} className="flex items-center gap-2">
             <span className="text-xs text-gray-400 w-4">{i + 1}</span>
             <span className="text-sm text-gray-700 flex-1">{d.category}</span>
-            <span className="text-sm font-medium text-gray-900">{fmt(d.total)}</span>
+            <span className="text-sm font-medium font-display text-gray-900">{fmt(d.total)}</span>
             <span className="text-xs text-gray-400 w-12 text-right">{(d.ratio * 100).toFixed(1)}%</span>
           </div>
         ))}
@@ -145,11 +145,11 @@ function NoteCard({ yearMonth }: { yearMonth: string }) {
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm">
+    <div className="bg-white rounded-2xl p-5 border border-gray-100">
       <div className="flex items-center justify-between mb-2">
         <p className="text-xs text-gray-500">今月のメモ</p>
         {!editing && (
-          <button onClick={startEdit} className="text-xs text-primary-500">編集</button>
+          <button onClick={startEdit} className="text-xs text-primary-600">編集</button>
         )}
       </div>
       {editing ? (
@@ -203,7 +203,7 @@ export function DashboardTab() {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <PersonFilter
         persons={state.persons}
         selected={selectedPerson}

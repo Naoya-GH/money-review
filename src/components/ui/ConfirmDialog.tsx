@@ -12,13 +12,13 @@ export function ConfirmDialog({ message, onConfirm, onCancel }: Props) {
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 py-2 rounded-lg border border-gray-300 text-sm text-gray-600"
+            className="flex-1 py-2 rounded-lg border border-gray-200 text-sm text-gray-600"
           >
             キャンセル
           </button>
           <button
             onClick={onConfirm}
-            className="flex-1 py-2 rounded-lg bg-red-500 text-white text-sm font-medium"
+            className="flex-1 py-2 rounded-lg bg-red-500 text-white text-sm font-medium transition-colors hover:bg-red-600 active:scale-[0.98]"
           >
             削除
           </button>

@@ -6,7 +6,7 @@ export function Header() {
   const options = useMonthOptions();
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 flex items-center justify-between h-14">
+    <header className="sticky top-0 z-30 bg-white border-b border-gray-100 px-4 flex items-center justify-between h-14">
       <span className="text-base font-medium text-gray-800">家計ノート</span>
       <select
         value={state.selectedMonth}

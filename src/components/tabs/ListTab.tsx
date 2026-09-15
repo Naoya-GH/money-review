@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { X } from 'lucide-react';
 import { useAppContext } from '../../contexts/AppContext';
 import { useTransactions, useUpdateTransaction, useDeleteTransaction } from '../../hooks/useTransactions';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
@@ -7,10 +8,10 @@ import type { Transaction } from '../../types';
 
 const BADGE_COLORS = [
   'bg-primary-100 text-primary-700',
-  'bg-purple-100 text-purple-700',
-  'bg-pink-100 text-pink-700',
-  'bg-amber-100 text-amber-700',
-  'bg-emerald-100 text-emerald-700',
+  'bg-[#E3E1F0] text-[#5B5A82]',
+  'bg-[#F0E1E1] text-[#8A5A5A]',
+  'bg-[#F0E9D8] text-[#8A7A4A]',
+  'bg-[#DCE6E0] text-[#4E6B5C]',
 ];
 
 function categoryColor(categories: { name: string }[], name: string) {
@@ -72,7 +73,7 @@ function EditForm({
         <input type="text" value={form.memo} onChange={e => setForm(f => ({ ...f, memo: e.target.value }))} className={inputCls} />
       )}
       <div className="flex gap-2">
-        <button onClick={onClose} className="flex-1 py-2 border border-gray-300 rounded-lg text-sm text-gray-600">
+        <button onClick={onClose} className="flex-1 py-2 border border-gray-200 rounded-lg text-sm text-gray-600">
           キャンセル
         </button>
         <button
@@ -97,27 +98,27 @@ function TransactionRow({ tx }: { tx: Transaction }) {
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         <div
           className="flex items-center px-4 py-3 gap-2 cursor-pointer"
           onClick={() => setExpanded(e => !e)}
         >
           <span className="text-xs text-gray-400 w-10 shrink-0">{mmdd}</span>
           {tx.person && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-[#F0E9D8] text-[#8A7A4A] border border-[#E4D9BC] shrink-0">
               {tx.person}
             </span>
           )}
           <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${categoryColor(state.categories, tx.category)}`}>
             {tx.category}
           </span>
-          <span className="text-sm font-medium text-gray-900 shrink-0">¥{tx.amount.toLocaleString()}</span>
+          <span className="text-sm font-medium font-display text-gray-900 shrink-0">¥{tx.amount.toLocaleString()}</span>
           <span className="text-sm text-gray-600 flex-1 truncate">{tx.description}</span>
           <button
             onClick={e => { e.stopPropagation(); setConfirmDelete(true); }}
-            className="text-gray-300 hover:text-red-400 text-sm px-1 shrink-0"
+            className="text-gray-300 hover:text-red-400 px-1 shrink-0"
           >
-            ✕
+            <X size={14} />
           </button>
         </div>
         {expanded && <EditForm tx={tx} onClose={() => setExpanded(false)} />}
@@ -150,9 +151,9 @@ export function ListTab() {
 
   return (
     <div className="space-y-2">
-      <div className="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between">
+      <div className="bg-white rounded-2xl p-4 border border-gray-100 flex items-center justify-between">
         <span className="text-sm text-gray-500">全{transactions.length}件</span>
-        <span className="text-sm font-bold text-gray-900">合計 ¥{total.toLocaleString()}</span>
+        <span className="text-sm font-bold font-display text-gray-900">合計 ¥{total.toLocaleString()}</span>
       </div>
 
       {sorted.length === 0 ? (

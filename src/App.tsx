@@ -15,7 +15,7 @@ const CategoryTab  = lazy(() => import('./components/tabs/CategoryTab').then(m =
 function TabContent() {
   const { state } = useAppContext();
   return (
-    <main className="flex-1 overflow-y-auto px-4 py-4 pb-24 max-w-[600px] w-full mx-auto">
+    <main className="flex-1 overflow-y-auto px-4 py-5 pb-24 max-w-[600px] w-full mx-auto">
       <Suspense fallback={<div className="flex justify-center py-12"><LoadingSpinner /></div>}>
         {state.activeTab === 'dashboard' && <DashboardTab />}
         {state.activeTab === 'register' && <RegisterTab />}
@@ -29,7 +29,7 @@ function TabContent() {
 function AppShell() {
   useSettings();
   return (
-    <div className="min-h-svh flex flex-col bg-primary-50">
+    <div className="min-h-svh flex flex-col bg-gray-50">
       <Header />
       <TabContent />
       <BottomNav />

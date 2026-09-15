@@ -1,3 +1,4 @@
+import { X } from 'lucide-react';
 import { useAppContext } from '../../contexts/AppContext';
 
 const BG: Record<string, string> = {
@@ -21,7 +22,7 @@ export function ToastContainer() {
             onClick={() => dispatch({ type: 'REMOVE_TOAST', payload: t.id })}
             className="shrink-0 opacity-70 hover:opacity-100"
           >
-            ✕
+            <X size={16} />
           </button>
         </div>
       ))}

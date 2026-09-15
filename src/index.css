@@ -1,15 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #fdf5f2;
-  --color-primary-100: #f0ddd8;
-  --color-primary-200: #e8d5c4;
-  --color-primary-300: #d4a5a5;
-  --color-primary-400: #c49090;
-  --color-primary-500: #b87d6d;
-  --color-primary-600: #5d2e46;
-  --color-primary-700: #4a2438;
-  --color-primary-800: #3a1a2c;
+  --color-primary-50: #FFF1F2;
+  --color-primary-100: #FFE4E6;
+  --color-primary-200: #FECDD3;
+  --color-primary-300: #FDA4AF;
+  --color-primary-400: #FB7185;
+  --color-primary-500: #F43F5E;
+  --color-primary-600: #E11D48;
+  --color-primary-700: #BE123C;
+  --color-primary-800: #9F1239;
+
+  --font-sans: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --font-display: "Outfit", "Zen Kaku Gothic New", sans-serif;
+
+  --animate-slide-in: slide-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 * {
@@ -18,8 +36,8 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #fdf5f2;
+  font-family: var(--font-sans);
+  background: #fafafa;
 }
 
 #root {

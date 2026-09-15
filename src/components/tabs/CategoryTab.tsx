@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Plus, Pencil, X, ChevronUp, ChevronDown } from 'lucide-react';
 import { useAppContext } from '../../contexts/AppContext';
 import { useCategories } from '../../hooks/useCategories';
 import { ConfirmDialog } from '../ui/ConfirmDialog';
@@ -16,7 +17,7 @@ function CategoryForm({
   const [value, setValue] = useState(initial || '');
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm space-y-3">
+    <div className="bg-white rounded-2xl p-5 border border-gray-100 space-y-3">
       <label className="block text-xs text-gray-500">カテゴリ名</label>
       <input
         type="text"
@@ -26,7 +27,7 @@ function CategoryForm({
         className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
       />
       <div className="flex gap-2">
-        <button onClick={onCancel} className="flex-1 py-2 border border-gray-300 rounded-lg text-sm text-gray-600">
+        <button onClick={onCancel} className="flex-1 py-2 border border-gray-200 rounded-lg text-sm text-gray-600">
           キャンセル
         </button>
         <button
@@ -70,13 +71,13 @@ function PlaceSection() {
           </p>
         )}
         {places.map(name => (
-          <div key={name} className="bg-white rounded-xl px-4 py-3 shadow-sm flex items-center gap-3">
+          <div key={name} className="bg-white rounded-2xl px-4 py-3 border border-gray-100 flex items-center gap-3">
             <span className="flex-1 text-sm text-gray-800">{name}</span>
             <button
               onClick={() => setDeletingName(name)}
-              className="text-xs text-gray-400 hover:text-red-500 px-1"
+              className="text-gray-400 hover:text-red-500 px-1"
             >
-              ✕
+              <X size={14} />
             </button>
           </div>
         ))}
@@ -122,15 +123,15 @@ function PersonSection() {
         {!adding && (
           <button
             onClick={() => { setAdding(true); setValue(''); }}
-            className="text-sm text-primary-600 font-medium"
+            className="flex items-center gap-1 text-sm text-primary-600 font-medium"
           >
-            ＋ 追加
+            <Plus size={14} /> 追加
           </button>
         )}
       </div>
 
       {adding && (
-        <div className="bg-white rounded-xl p-4 shadow-sm space-y-3">
+        <div className="bg-white rounded-2xl p-5 border border-gray-100 space-y-3">
           <label className="block text-xs text-gray-500">名前</label>
           <input
             type="text"
@@ -143,7 +144,7 @@ function PersonSection() {
           <div className="flex gap-2">
             <button
               onClick={() => setAdding(false)}
-              className="flex-1 py-2 border border-gray-300 rounded-lg text-sm text-gray-600"
+              className="flex-1 py-2 border border-gray-200 rounded-lg text-sm text-gray-600"
             >
               キャンセル
             </button>
@@ -165,13 +166,13 @@ function PersonSection() {
           </p>
         )}
         {persons.map(name => (
-          <div key={name} className="bg-white rounded-xl px-4 py-3 shadow-sm flex items-center gap-3">
+          <div key={name} className="bg-white rounded-2xl px-4 py-3 border border-gray-100 flex items-center gap-3">
             <span className="flex-1 text-sm text-gray-800">{name}</span>
             <button
               onClick={() => setDeletingName(name)}
-              className="text-xs text-gray-400 hover:text-red-500 px-1"
+              className="text-gray-400 hover:text-red-500 px-1"
             >
-              ✕
+              <X size={14} />
             </button>
           </div>
         ))}
@@ -216,9 +217,9 @@ export function CategoryTab() {
           {!adding && categories.length < 20 && (
             <button
               onClick={() => setAdding(true)}
-              className="text-sm text-primary-600 font-medium"
+              className="flex items-center gap-1 text-sm text-primary-600 font-medium"
             >
-              ＋ 追加
+              <Plus size={14} /> 追加
             </button>
           )}
         </div>
@@ -243,23 +244,27 @@ export function CategoryTab() {
             <p className="text-center text-sm text-gray-400 py-8">カテゴリを追加してください</p>
           )}
           {categories.map((c, i) => (
-            <div key={c.name} className="bg-white rounded-xl px-4 py-3 shadow-sm flex items-center gap-3">
+            <div key={c.name} className="bg-white rounded-2xl px-4 py-3 border border-gray-100 flex items-center gap-3">
               <div className="flex flex-col gap-0.5">
-                <button onClick={() => moveUp(i)} disabled={i === 0} className="text-gray-300 disabled:opacity-20 text-xs leading-none">▲</button>
-                <button onClick={() => moveDown(i)} disabled={i === categories.length - 1} className="text-gray-300 disabled:opacity-20 text-xs leading-none">▼</button>
+                <button onClick={() => moveUp(i)} disabled={i === 0} className="text-gray-300 disabled:opacity-20 leading-none">
+                  <ChevronUp size={14} />
+                </button>
+                <button onClick={() => moveDown(i)} disabled={i === categories.length - 1} className="text-gray-300 disabled:opacity-20 leading-none">
+                  <ChevronDown size={14} />
+                </button>
               </div>
               <span className="flex-1 text-sm text-gray-800">{c.name}</span>
               <button
                 onClick={() => setEditingName(c.name)}
-                className="text-xs text-gray-400 hover:text-primary-600 px-1"
+                className="text-gray-400 hover:text-primary-600 px-1"
               >
-                ✎
+                <Pencil size={14} />
               </button>
               <button
                 onClick={() => setDeletingName(c.name)}
-                className="text-xs text-gray-400 hover:text-red-500 px-1"
+                className="text-gray-400 hover:text-red-500 px-1"
               >
-                ✕
+                <X size={14} />
               </button>
             </div>
           ))}

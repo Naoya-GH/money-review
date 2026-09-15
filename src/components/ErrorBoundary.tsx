@@ -20,8 +20,8 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.error) {
       return (
-        <div className="min-h-svh flex items-center justify-center p-4 bg-primary-50">
-          <div className="bg-white rounded-xl p-6 shadow-sm max-w-sm w-full space-y-3">
+        <div className="min-h-svh flex items-center justify-center p-4 bg-gray-50">
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 max-w-sm w-full space-y-3">
             <p className="text-red-500 font-medium">レンダリングエラーが発生しました</p>
             <div className="bg-red-50 rounded-lg p-3 text-xs font-mono text-red-700 break-all">
               {this.state.error.message || '(メッセージなし)'}
